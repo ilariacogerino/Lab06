@@ -35,28 +35,154 @@ class Controller:
 
     def handleTopVendite(self, e):
         self._view._lv.controls.clear()
-        anno = self._view._ddAnno.value
+        annoStr = self._view._ddAnno.value #E' UNA STRINGA
+        if annoStr != "Nessun filtro":
+            anno = int(annoStr)
+        else:
+            anno = annoStr
         brand = self._view._ddBrand.value
-        retailer = self._view._ddRetailer.value
-        topVendite = self._model.getTopVendite(anno, brand, retailer)
-        #print(anno, brand, retailer)
-        #print(topVendite)
-        for vendita in topVendite:
-            self._view._lv.controls.append(ft.Text(vendita))
+        retailerStr = self._view._ddRetailer.value
+        if retailerStr != "Nessun filtro":
+            retailer = int(retailerStr)
+        else:
+            retailer = retailerStr
+        vendite = []
+
+        if (anno == "Nessun filtro" and brand == "Nessun filtro" and retailer == "Nessun filtro"):
+            vendite = self._model.getVendite()
+
+        elif (anno != "Nessun filtro" and brand != "Nessun filtro" and retailer != "Nessun filtro"):
+            topVendite = self._model.getVendite()
+            for vendita in topVendite:
+                if (vendita.Date.year == anno and vendita.Product_brand == brand and vendita.Retailer_code == retailer):
+                    vendite.append(vendita)
+
+        elif (anno == "Nessun filtro" and brand != "Nessun filtro" and retailer != "Nessun filtro"):
+            topVendite = self._model.getVendite()
+            for vendita in topVendite:
+                if (vendita.Product_brand == brand and vendita.Retailer_code == retailer):
+                    vendite.append(vendita)
+
+        elif (anno == "Nessun filtro" and brand == "Nessun filtro" and retailer != "Nessun filtro"):
+            topVendite = self._model.getVendite()
+            for vendita in topVendite:
+                if (vendita.Retailer_code == retailer):
+                    vendite.append(vendita)
+
+        elif (anno == "Nessun filtro" and brand != "Nessun filtro" and retailer == "Nessun filtro"):
+            topVendite = self._model.getVendite()
+            for vendita in topVendite:
+                if (vendita.Product_brand == brand):
+                    vendite.append(vendita)
+
+        elif (anno != "Nessun filtro" and brand == "Nessun filtro" and retailer != "Nessun filtro"):
+            topVendite = self._model.getVendite()
+            for vendita in topVendite:
+                if (vendita.Date.year == anno and vendita.Retailer_code == retailer):
+                    vendite.append(vendita)
+
+        elif (anno != "Nessun filtro" and brand == "Nessun filtro" and retailer == "Nessun filtro"):
+            topVendite = self._model.getVendite()
+            for vendita in topVendite:
+                if (vendita.Date.year == anno):
+                    vendite.append(vendita)
+
+        elif (anno != "Nessun filtro" and brand != "Nessun filtro" and retailer == "Nessun filtro"):
+            topVendite = self._model.getVendite()
+            for vendita in topVendite:
+                if (vendita.Date.year == anno and vendita.Product_brand == brand):
+                    vendite.append(vendita)
+
+        if len(vendite) == 0:
+            self._view._lv.controls.append(ft.Text(f"Non ci sono vendite con questi filtri!"))
+        elif len(vendite)>5:
+            for i in range (0,5):
+                self._view._lv.controls.append(ft.Text(vendite[i]))
+        else:
+            for vendita in vendite:
+                self._view._lv.controls.append(ft.Text(vendita))
         self._view._page.update()
 
 
     def handleAnalizzaVendite(self, e):
         self._view._lv.controls.clear()
-        anno = self._view._ddAnno.value
+        annoStr = self._view._ddAnno.value  # E' UNA STRINGA
+        if annoStr != "Nessun filtro":
+            anno = int(annoStr)
+        else:
+            anno = annoStr
         brand = self._view._ddBrand.value
-        retailer = self._view._ddRetailer.value
+        retailerStr = self._view._ddRetailer.value
+        if retailerStr != "Nessun filtro":
+            retailer = int(retailerStr)
+        else:
+            retailer = retailerStr
+        print(anno, brand, retailer)
         self._view._lv.controls.append(ft.Text(f"Statistiche vendite: "))
-        dati = self._model.getAnalisiVendite(anno, brand, retailer)
-        self._view._lv.controls.append(ft.Text(f"Giro d'affari: {dati[0]} "))
-        self._view._lv.controls.append(ft.Text(f"Numero vendite: {dati[1]} "))
-        self._view._lv.controls.append(ft.Text(f"Numero retailers coinvolti: {dati[2]} "))
-        self._view._lv.controls.append(ft.Text(f"Numero prodotti coinvolti: {dati[3]} "))
+        vendite = []
+        ricaviTot = 0
+        countVendite = 0
+        RetailerCoinvolti = []
+        ProductCoinvolti = []
+
+        if (anno == "Nessun filtro" and brand == "Nessun filtro" and retailer == "Nessun filtro"):
+            vendite = self._model.getVendite()
+
+        elif (anno != "Nessun filtro" and brand != "Nessun filtro" and retailer != "Nessun filtro"):
+            topVendite = self._model.getVendite()
+            for vendita in topVendite:
+                if (vendita.Date.year == anno and vendita.Product_brand == brand and vendita.Retailer_code == retailer):
+                    vendite.append(vendita)
+
+        elif (anno == "Nessun filtro" and brand != "Nessun filtro" and retailer != "Nessun filtro"):
+            topVendite = self._model.getVendite()
+            for vendita in topVendite:
+                if (vendita.Product_brand == brand and vendita.Retailer_code == retailer):
+                    vendite.append(vendita)
+
+        elif (anno == "Nessun filtro" and brand == "Nessun filtro" and retailer != "Nessun filtro"):
+            topVendite = self._model.getVendite()
+            for vendita in topVendite:
+                if (vendita.Retailer_code == retailer):
+                    vendite.append(vendita)
+
+        elif (anno == "Nessun filtro" and brand != "Nessun filtro" and retailer == "Nessun filtro"):
+            topVendite = self._model.getVendite()
+            for vendita in topVendite:
+                if (vendita.Product_brand == brand):
+                    vendite.append(vendita)
+
+        elif (anno != "Nessun filtro" and brand == "Nessun filtro" and retailer != "Nessun filtro"):
+            topVendite = self._model.getVendite()
+            for vendita in topVendite:
+                if (vendita.Date.year == anno and vendita.Retailer_code == retailer):
+                    vendite.append(vendita)
+
+        elif (anno != "Nessun filtro" and brand == "Nessun filtro" and retailer == "Nessun filtro"):
+            topVendite = self._model.getVendite()
+            for vendita in topVendite:
+                if (vendita.Date.year == anno):
+                    vendite.append(vendita)
+
+        elif (anno != "Nessun filtro" and brand != "Nessun filtro" and retailer == "Nessun filtro"):
+            topVendite = self._model.getVendite()
+            for vendita in topVendite:
+                if (vendita.Date.year == anno and vendita.Product_brand == brand):
+                    vendite.append(vendita)
+
+        for vendita in vendite:
+            ricaviTot += vendita.Ricavo
+            countVendite += 1
+            if vendita.Retailer_code not in RetailerCoinvolti:
+                RetailerCoinvolti.append(vendita.Retailer_code)
+            if vendita.Product_number not in ProductCoinvolti:
+                ProductCoinvolti.append(vendita.Product_number)
+
+        self._view._lv.controls.append(ft.Text(f"Giro d'affari: {ricaviTot}"))
+        self._view._lv.controls.append(ft.Text(f"Numero vendite: {countVendite}"))
+        self._view._lv.controls.append(ft.Text(f"Numero retailers coinvolti: {len(RetailerCoinvolti)}"))
+        self._view._lv.controls.append(ft.Text(f"Numero prodotti coinvolti: {len(ProductCoinvolti)}"))
 
         self._view._page.update()
+
 

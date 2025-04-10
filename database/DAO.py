@@ -47,24 +47,24 @@ class DAO():
         cnx.close()
         return retailers
 
-    def getRicavi(self, anno, brand, retailer):
+    def getVendite(self):
         cnx = DBConnect.get_connection()
         cursor = cnx.cursor(dictionary=True)
-        query = """select Date, Unit_sale_price * Quantity as Ricavo, gds.Retailer_code, gds.Product_number  
+        query = """select Date, Unit_sale_price * Quantity as Ricavo, gds.Retailer_code, gds.Product_number, gp.Product_brand   
                     from go_daily_sales gds, go_products gp, go_retailers gr 
                     where gds.Retailer_code = gr.Retailer_code and gds.Product_number = gp.Product_number
-                         and year(Date)= %s and gp.Product_brand =  %s and gr.Retailer_code = %s
                     order by -ricavo"""
-        cursor.execute(query, (anno, brand, retailer))
-        ricavi = []
+        cursor.execute(query)
+        vendite = []
         for row in cursor:
-            ricavi.append(Sales(row["Date"], row["Ricavo"], row["Retailer_code"], row["Product_number"]))
+            vendite.append(Sales(row["Date"], row["Ricavo"], row["Retailer_code"], row["Product_number"], row["Product_brand"]))
         cursor.close()
         cnx.close()
-        return ricavi
+        return vendite
 
-    def AnalisiVendite(self, anno, brand, retailer):
-        vendite = self.getRicavi(anno, brand, retailer)
+
+    def AnalisiVendite(self):
+        vendite = self.getVendite()
         ricaviTot = 0
         countVendite = 0
         RetailerCoinvolti = []
@@ -79,10 +79,4 @@ class DAO():
         return ricaviTot, countVendite, len(RetailerCoinvolti), len(ProductCoinvolti)
 
 
-
-        pass
-
-if __name__ == '__main__':
-    dao = DAO()
-    print(dao.getRicavi(2017, "Star", "1216"))
 

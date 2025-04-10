@@ -13,12 +13,9 @@ class Model:
     def getRetailer(self):
         return self.dao.getRetailer()
 
-    def getTopVendite(self, anno, brand, retailer):
-        return self.dao.getRicavi(anno, brand, retailer)
+    def getVendite(self):
+        return self.dao.getVendite()
 
-    def getAnalisiVendite(self, anno, brand, retailer):
-        return self.dao.AnalisiVendite(anno, brand, retailer)
+    def getAnalisiVendite(self):
+        return self.dao.AnalisiVendite()
 
-if __name__ == "__main__":
-    m = Model()
-    print(m.getTopVendite(2017, "Star", "Connor Department Store"))
